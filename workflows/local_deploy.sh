@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ROOT_DIR="$SCRIPT_DIR/../.."
+ROOT_DIR="$SCRIPT_DIR/.."
 
 if [ -f "$ROOT_DIR/.env" ]; then
   export $(grep -v -E '^\s*#|^\s*$' "$ROOT_DIR/.env" | xargs)

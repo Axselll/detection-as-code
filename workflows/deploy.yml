@@ -1,0 +1,42 @@
+#  NEED ADJUSTMENT
+name: Build & Deploy Detections to Splunk
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.22.0"
+
+      - name: Build Go Binary
+        run: go build -o build ../../main.go
+
+      - name: Run Go Binary to Package App
+        run: ./build
+
+      - name: Verify App Archive Exists
+        run: |
+          if [ ! -f apps/detections_app.tar.gz ]; then
+            echo "Error: detections_app.tar.gz not found"
+            exit 1
+          fi
+
+      - name: Deploy to Splunk
+        env:
+          SPLUNK_HOST: ${{ secrets.SPLUNK_HOST }}
+          SPLUNK_TOKEN: ${{ secrets.SPLUNK_TOKEN }}
+        run: |
+          curl -k -H "Authorization: Bearer $SPLUNK_TOKEN" \
+               https://$SPLUNK_HOST:8089/services/apps/local \
+               -F "name=@apps/detections_app.tar.gz"

@@ -15,8 +15,6 @@ cd "$ROOT_DIR"
 
 
 go build -o build main.go
-
-
 ./build
 
 TARBALL_PATH="$ROOT_DIR/app/detections_app.tar.gz"

@@ -11,6 +11,8 @@
 *.env
 *.txt
 build
+savedsearches.conf
+*.tar.gz
 
 # Test binary, built with `go test -c`
 *.test
